@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+# Triggers the workflow on a push to the 'main' branch
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch name if different
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Specifies the OS the workflow will run on
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # You can set this to the required Node.js version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the project, injecting the VITE_NASA_API_KEY secret
+      - name: Build project
+        env:
+          VITE_NASA_API_KEY: ${{ secrets.VITE_NASA_API_KEY }}  # Inject your secret here
+        run: npm run build
+
+      # Step 5: Deploy the built files to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
+          publish_dir: ./dist  # Specify the folder that contains the built files

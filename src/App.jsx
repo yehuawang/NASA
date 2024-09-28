@@ -7,6 +7,7 @@ function App() {
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(false)
     const NASA_KEY = import.meta.env.VITE_NASA_API_KEY
+    console.log(apiKey)
     const [showModal, setShowModal] = useState(false)
 
     function handleToggleModal() {
